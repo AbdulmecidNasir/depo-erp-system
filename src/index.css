@@ -1,0 +1,521 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ring: 0 0% 0%;
+    
+    /* Light theme colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --bg-sidebar: rgba(255, 255, 255, 0.8);
+    --bg-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+    
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --border-focus: #3b82f6;
+    
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-sidebar: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  [data-theme="dark"] {
+    /* Dark theme colors - Professional palette */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: #1e293b;
+    --bg-input: #1e293b;
+    --bg-sidebar: rgba(15, 23, 42, 0.95);
+    --bg-header: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+    
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --border-focus: #60a5fa;
+    
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-sidebar: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  }
+
+  html, body, #root {
+    height: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Light theme default background */
+  body:not([data-theme="dark"]) {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
+
+  /* Dark theme background */
+  body[data-theme="dark"] {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+
+  /* Global modern form styles (applies project-wide) */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-muted); }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-primary);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Professional pill buttons for light/dark themes */
+  .btn-pill { /* base, can be used directly if needed */
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 select-none;
+  }
+  .btn-pill-solid {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 select-none;
+    background-color: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    box-shadow: 0 6px 20px rgba(2, 6, 23, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-pill-solid:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(2, 6, 23, 0.12); }
+  .btn-pill-solid:active { transform: translateY(0); }
+  /* Shimmer stripe */
+  .btn-pill-solid::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: linear-gradient(120deg, transparent 40%, rgba(100, 116, 139, 0.12) 50%, transparent 60%);
+    transform: translateX(-100%);
+    animation: pillShimmer 3s linear infinite;
+    pointer-events: none;
+  }
+  [data-theme="dark"] .btn-pill-solid {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: rgba(15, 23, 42, 0.2);
+  }
+
+  .btn-pill-outline {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 select-none;
+    background: transparent;
+    color: #0f172a;
+    border: 1.5px solid rgba(15, 23, 42, 0.35);
+    /* inner outline */
+    box-shadow: inset 0 0 0 1.5px rgba(15, 23, 42, 0.15);
+  }
+  .btn-pill-outline:hover { background: rgba(15, 23, 42, 0.03); }
+  [data-theme="dark"] .btn-pill-outline {
+    color: #e5e7eb;
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.18);
+  }
+  [data-theme="dark"] .btn-pill-outline:hover { background: rgba(255, 255, 255, 0.04); }
+
+  /* Inputs - modern style */
+  .input-modern {
+    @apply w-full rounded-xl px-3 py-2 transition-colors duration-200 outline-none;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+  }
+  .input-modern::placeholder { color: var(--text-muted); }
+  .input-modern:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl shadow-soft transition-all duration-300;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-1px);
+  }
+  
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl transition-all duration-300;
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+  }
+  
+  .btn-ghost:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-secondary);
+  }
+
+  /* Dark theme specific components */
+  .theme-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+  }
+
+  .theme-input {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+  }
+
+  .theme-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .theme-sidebar {
+    background: var(--bg-sidebar);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
+  }
+
+  .theme-header {
+    background: var(--bg-header);
+    transition: all 0.3s ease;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 300ms ease-out both;
+  }
+  .animate-fade-in-down {
+    animation: fadeInDown 200ms ease-out both;
+  }
+  .animate-fade-in {
+    animation: fadeIn 400ms ease-out both;
+  }
+  .animate-slide-down {
+    animation: slideDown 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-slide-up {
+    animation: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-scale-in {
+    animation: scaleIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-slide-in-right {
+    animation: slideInRight 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-bounce-in {
+    animation: bounceIn 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+  }
+  .animate-pulse-slow {
+    animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shimmer animation for pill buttons */
+@keyframes pillShimmer {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Search filter tag animations */
+@keyframes tagSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.filter-tag-enter {
+  animation: tagSlideIn 200ms ease-out both;
+}
+
+/* Smooth transitions for dark mode */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Override for elements that shouldn't transition */
+.no-transition,
+input,
+textarea,
+select,
+button:active {
+  transition: none !important;
+}
+
+/* Scrollbar styling for search modal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+/* Modern search input animations */
+.search-input-glow {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input-glow:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Filter button pulse animation */
+.filter-pulse {
+  animation: filterPulse 2s infinite;
+}
+
+@keyframes filterPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Search icon bounce */
+.search-icon-bounce {
+  animation: searchBounce 0.6s ease-in-out;
+}
+
+@keyframes searchBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-2px) scale(1.1);
+  }
+  60% {
+    transform: translateY(-1px) scale(1.05);
+  }
+}
+
+/* Smooth expand animation for search */
+.search-expand {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-expand:focus-within {
+  transform: scale(1.02);
+}
+
+/* Modern button hover effects */
+.modern-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.modern-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.modern-button:hover::before {
+  left: 100%;
+}
+
+/* Focus ring animation */
+.focus-ring {
+  position: relative;
+}
+
+.focus-ring::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.focus-ring:focus::after {
+  opacity: 1;
+}
