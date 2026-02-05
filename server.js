@@ -154,9 +154,15 @@ app.use((err, req, res, next) => {
 // Frontend serving
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.get("/*", (req, res) => {
+// Catch-all SPA handler (Node 22 compatible)
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api")) {
+    return next();
+  }
+
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
+
 
 const PORT = process.env.PORT || 5000;
 
