@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -29,6 +30,9 @@ import financeRoutes from './routes/finance.js';
 import inventoryCountRoutes from './routes/inventoryCountRoutes.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -147,12 +151,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Маршрут не найден'
-  });
+// Frontend serving
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
